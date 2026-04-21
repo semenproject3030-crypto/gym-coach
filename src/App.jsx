@@ -492,29 +492,17 @@ export default function App() {
     return <SetupScreen onSave={saveProfile} />;
   }
 
-   if (view === 'session' && activeSession) {
+  if (view === 'session' && activeSession) {
     return (
-      <>
-        <SessionScreen
-          session={activeSession}
-          setSession={setActiveSession}
-          onFinish={saveWorkout}
-          onCancel={() => { setActiveSession(null); setView('today'); }}
-          onShowExercise={(id) => setExerciseDetail(id)}
-          history={workoutLog}
-        />
-        {exerciseDetail && (
-          <ExerciseModal exerciseId={exerciseDetail} onClose={() => setExerciseDetail(null)} />
-        )}
-      </>
+      <SessionScreen
+        session={activeSession}
+        setSession={setActiveSession}
+        onFinish={saveWorkout}
+        onCancel={() => { setActiveSession(null); setView('today'); }}
+        history={workoutLog}
+      />
     );
   }
-
-Отпишись после этого шага:
-
-✅ "Заменил, код выглядит как у тебя" — дам шаги как сохранить и пересобрать
-⚠️ "Что-то пошло не так / выделил не то / кусок исчез" — без паники, в GitHub есть кнопка Cancel вверху справа, которая отменит все изменения и вернёт файл как был. Жми её, и попробуем снова.
-2 / 2
 
   return (
     <div className="min-h-screen bg-[#0a0908] text-[#f5f2eb]">
@@ -781,10 +769,11 @@ function TodayView({ profile, weightLog, workoutLog, nextProgram, onStartWorkout
 }
 
 // ============ SESSION SCREEN ============
-function SessionScreen({ session, setSession, onFinish, onCancel, onShowExercise, history }) {
+function SessionScreen({ session, setSession, onFinish, onCancel, history }) {
   const [currentEx, setCurrentEx] = useState(0);
   const [restTimer, setRestTimer] = useState(null);
   const [restSeconds, setRestSeconds] = useState(0);
+  const [modalExerciseId, setModalExerciseId] = useState(null);
 
   useEffect(() => {
     if (!restTimer) return;
@@ -873,7 +862,7 @@ function SessionScreen({ session, setSession, onFinish, onCancel, onShowExercise
             <h2 className="display text-3xl font-extrabold leading-tight mb-1">{exMeta.name}</h2>
             <div className="text-sm text-white/60">{exMeta.muscles}</div>
           </div>
-          <button onClick={() => onShowExercise(ex.id)} className="bg-white/5 border border-white/10 rounded-xl p-3 ml-3">
+          <button onClick={() => setModalExerciseId(ex.id)} className="bg-white/5 border border-white/10 rounded-xl p-3 ml-3">
             <Info size={18} className="text-[#d4ff2e]" />
           </button>
         </div>
@@ -958,6 +947,10 @@ function SessionScreen({ session, setSession, onFinish, onCancel, onShowExercise
           })}
         </div>
       </main>
+
+      {modalExerciseId && (
+        <ExerciseModal exerciseId={modalExerciseId} onClose={() => setModalExerciseId(null)} />
+      )}
     </div>
   );
 }
