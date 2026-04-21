@@ -492,18 +492,29 @@ export default function App() {
     return <SetupScreen onSave={saveProfile} />;
   }
 
-  if (view === 'session' && activeSession) {
+   if (view === 'session' && activeSession) {
     return (
-      <SessionScreen
-        session={activeSession}
-        setSession={setActiveSession}
-        onFinish={saveWorkout}
-        onCancel={() => { setActiveSession(null); setView('today'); }}
-        onShowExercise={(id) => setExerciseDetail(id)}
-        history={workoutLog}
-      />
+      <>
+        <SessionScreen
+          session={activeSession}
+          setSession={setActiveSession}
+          onFinish={saveWorkout}
+          onCancel={() => { setActiveSession(null); setView('today'); }}
+          onShowExercise={(id) => setExerciseDetail(id)}
+          history={workoutLog}
+        />
+        {exerciseDetail && (
+          <ExerciseModal exerciseId={exerciseDetail} onClose={() => setExerciseDetail(null)} />
+        )}
+      </>
     );
   }
+
+Отпишись после этого шага:
+
+✅ "Заменил, код выглядит как у тебя" — дам шаги как сохранить и пересобрать
+⚠️ "Что-то пошло не так / выделил не то / кусок исчез" — без паники, в GitHub есть кнопка Cancel вверху справа, которая отменит все изменения и вернёт файл как был. Жми её, и попробуем снова.
+2 / 2
 
   return (
     <div className="min-h-screen bg-[#0a0908] text-[#f5f2eb]">
